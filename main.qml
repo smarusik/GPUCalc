@@ -1,16 +1,14 @@
 import QtQuick 2.10
 import QtQuick.Window 2.10
-import calc_item 1.0
+import vna_application_window 1.0
+import workarea_item 1.0
 
-Window {
+VNAApplicationWindow{
     visible: true
-    width: 640
-    height: 480
-    title: qsTr("Hello Calc")
+    width: 500
+    height: 500
 
-    CalcItem
-    {
-        visible: true
-        anchors.fill:parent
+    titleBar: Rectangle{
+        color: "blue"
     }
 }

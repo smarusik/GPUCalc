@@ -3,5 +3,8 @@
         <file>main.qml</file>
         <file>triangle.vsh</file>
         <file>triangle.fsh</file>
+        <file>texture.fsh</file>
+        <file>texture.vsh</file>
+        <file>example.png</file>
     </qresource>
 </RCC>

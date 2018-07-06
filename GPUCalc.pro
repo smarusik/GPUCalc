@@ -14,9 +14,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 #include(../cmt-core-chart/Diagram.pri)
 
-SOURCES += main.cpp \
-    calcitem.cpp \
-    trianglenode.cpp
+SOURCES += \
+    trianglenode.cpp \
+    app_window/backgrounditem.cpp \
+    app_window/main.cpp \
+    app_window/windowstates.cpp \
+    app_window/basicwindow.cpp \
+    app_window/contentlessitems.cpp \
+    app_window/rubberband.cpp
 
 RESOURCES += qml.qrc
 
@@ -32,9 +37,16 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    calcitem.h \
-    trianglenode.h
+    trianglenode.h \
+    texturenode.h \
+    app_window/backgrounditem.h \
+    app_window/windowstates.h \
+    app_window/basicwindow.h \
+    app_window/contentlessitems.h \
+    app_window/rubberband.h
 
 DISTFILES += \
     triangle.vert \
     triangle.frag
+
+INCLUDEPATH +=app_window

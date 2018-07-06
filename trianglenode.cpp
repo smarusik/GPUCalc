@@ -1,20 +1,22 @@
 #include "trianglenode.h"
 
 #include <QtGui/QColor>
-
 #include <QtQuick/QSGSimpleMaterial>
+#include <cmath>
 
-struct LineMaterial
+struct TraceMaterial
 {
     QColor color;
+    QMatrix4x4 matrix;
+    QVector4D offset;
 };
 
-class LineShader : public QSGSimpleMaterialShader<LineMaterial>
+class TraceShader : public QSGSimpleMaterialShader<TraceMaterial>
 {
-    QSG_DECLARE_SIMPLE_SHADER(LineShader, LineMaterial)
+    QSG_DECLARE_SIMPLE_SHADER(TraceShader, TraceMaterial)
 
 public:
-    LineShader() : id_color(-1)
+    TraceShader() : id_color(-1)
     {
         setShaderSourceFile(QOpenGLShader::Vertex, ":/triangle.vsh");
         setShaderSourceFile(QOpenGLShader::Fragment, ":/triangle.fsh");
@@ -22,16 +24,22 @@ public:
 
     QList<QByteArray> attributes() const {  return QList<QByteArray>() << "pos"; }
 
-    void updateState(const LineMaterial *m, const LineMaterial *) {
+    void updateState(const TraceMaterial *m, const TraceMaterial *) {
         program()->setUniformValue(id_color, m->color);
+        program()->setUniformValue(id_matrix, m->matrix);
+        program()->setUniformValue(id_offset, m->offset);
     }
 
     void resolveUniforms() {
         id_color = program()->uniformLocation("color");
+        id_matrix = program()->uniformLocation("transform");
+        id_offset = program()->uniformLocation("offset");
     }
 
 private:
     int id_color;
+    int id_matrix;
+    int id_offset;
 };
 
 struct LineVertex {
@@ -49,14 +57,21 @@ static const QSGGeometry::AttributeSet &attributes()
     return set;
 }
 
-TriangleNode::TriangleNode(float size, const QColor &color)
+TriangleNode::TriangleNode(const QColor &color)
     : m_geometry(attributes(), 0)
 {
     setGeometry(&m_geometry);
-    m_geometry.setDrawingMode(GL_TRIANGLE_STRIP);
+    m_geometry.setDrawingMode(GL_QUADS);
+    m_geometry.setLineWidth(2);
 
-    QSGSimpleMaterial<LineMaterial> *m = LineShader::createMaterial();
+    QSGSimpleMaterial<TraceMaterial> *m = TraceShader::createMaterial();
     m->state()->color = color;
+    m->state()->matrix=QMatrix4x4(1,0,0,0,
+                                  0,1,0,0,
+                                  0,0,1,0,
+                                  0,0,0,1);
+    m->state()->offset=QVector4D(0,0,0,0);
+
     m->setFlag(QSGMaterial::Blending);
     setMaterial(m);
     setFlag(OwnsMaterial);
@@ -72,7 +87,7 @@ TriangleNode::TriangleNode(float size, const QColor &color)
  */
 void TriangleNode::updateGeometry(const QRectF &bounds)
 {
-    m_geometry.allocate(3);
+    m_geometry.allocate(4);
 
     float x = bounds.x();
     float y = bounds.y();
@@ -81,9 +96,10 @@ void TriangleNode::updateGeometry(const QRectF &bounds)
 
     LineVertex *v = (LineVertex *) m_geometry.vertexData();
 
-    v[0].set(x+10, y+10);
-    v[1].set(x+10,h-10);
-    v[2].set(w-10,h-10);
+    v[0].set(x, y);
+    v[1].set(x, y+h);
+    v[2].set(x+w, y+h);
+    v[3].set(x+w, y);
 
     markDirty(QSGNode::DirtyGeometry);
 }

@@ -6,7 +6,7 @@
 class TriangleNode : public QSGGeometryNode
 {
 public:
-    TriangleNode(float size,const QColor &color);
+    TriangleNode(const QColor &color);
 
     void updateGeometry(const QRectF &bounds);
 
