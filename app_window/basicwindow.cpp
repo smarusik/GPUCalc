@@ -19,6 +19,9 @@ BasicWindow::BasicWindow(QWindow *parent):
     workingArea=new BaseContentlessItem(background);
     workingArea->setInterState(&interState);
 
+    titleBar=new TitleBarItem(background);
+    titleBar->setInterState(&interState);
+
     lBorder=new BorderItem(background,BasicInteractState::ResizeLeft);
     lBorder->setInterState(&interState);
     rBorder=new BorderItem(background,BasicInteractState::ResizeRight);
@@ -94,11 +97,8 @@ void BasicWindow::resizeInternals(const QSize &bgSize)
     background->setSize(bgSize);
     workingArea->setSize(background->size()-2*QSizeF(frameWidth,frameWidth));
 
-    if(titleBar)
-    {
-        titleBar->setPosition(background->position()+QPointF(frameWidth,frameWidth));
-        titleBar->setSize(QSizeF(background->width()-2*frameWidth,titleBarHeight));
-    }
+    titleBar->setPosition(background->position()+QPointF(frameWidth,frameWidth));
+    titleBar->setSize(QSizeF(background->width()-2*frameWidth,titleBarHeight));
 
     lBorder->setSize(QSizeF(frameWidth,bgSize.height()-frameWidth*4));
     rBorder->setSize(lBorder->size());
@@ -150,14 +150,14 @@ void BasicWindow::timerEvent(QTimerEvent *)
     interState.updateRubberBand();
 }
 
-QQuickItem *BasicWindow::getTitleBar() const
+QQuickItem *BasicWindow::getTitleBarContent() const
 {
-    return titleBar;
+    return titleBarContent;
 }
 
-void BasicWindow::setTitleBar(QQuickItem *value)
+void BasicWindow::setTitleBarContent(QQuickItem *value)
 {
-    titleBar = value;
-    titleBar->setParentItem(contentItem());
-    titleBar->setVisible(true);
+    titleBarContent = value;
+    titleBarContent->setParentItem(titleBar);
+    titleBarContent->setVisible(true);
 }

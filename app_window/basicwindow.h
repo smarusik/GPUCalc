@@ -4,13 +4,15 @@
 #include "windowstates.h"
 #include "backgrounditem.h"
 #include "contentlessitems.h"
+#include "titlebaritem.h"
 #include <QQuickWindow>
 #include <QPointer>
 
 class BasicWindow : public QQuickWindow
 {
     Q_OBJECT
-    Q_PROPERTY(QQuickItem* titleBar READ getTitleBar WRITE setTitleBar NOTIFY titleBarChanged)
+    Q_PROPERTY(QQuickItem* titleBarContent READ getTitleBarContent
+               WRITE setTitleBarContent NOTIFY titleBarContentChanged)
     Q_PROPERTY(BaseContentlessItem* workingArea READ getWorkingArea WRITE setWorkingArea)
 public:
     BasicWindow(QWindow *parent=nullptr);
@@ -18,14 +20,14 @@ public:
     {}
 
     // QWindow interface
-    QQuickItem *getTitleBar() const;
-    void setTitleBar(QQuickItem *value);
+    QQuickItem *getTitleBarContent() const;
+    void setTitleBarContent(QQuickItem *value);
 
     BaseContentlessItem *getWorkingArea() const;
     void setWorkingArea(BaseContentlessItem *value);
 
 signals:
-    void titleBarChanged(QQuickItem *titleBar);
+    void titleBarContentChanged(QQuickItem *titleBarContent);
 
 private:
     virtual void timerEvent(QTimerEvent *);
@@ -41,7 +43,8 @@ private:
     void resizeInternals(const QSize &bgSize);
     void moveInternals(const QPoint &bgOrigin);
 
-    QQuickItem *titleBar;
+    TitleBarItem *titleBar;
+    QQuickItem *titleBarContent;
     BaseContentlessItem *workingArea;
     BorderItem *lBorder,*rBorder,*tBorder,*bBorder,
                         *lbCorner,*rbCorner,*ltCorner,*rtCorner;

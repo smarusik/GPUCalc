@@ -16,10 +16,6 @@ private:
     virtual QSGNode *updatePaintNode(QSGNode *prev, UpdatePaintNodeData *) override;
     virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
 
-    virtual void timerEvent(QTimerEvent *);
-
-    //mouse events
-
     QColor color;
     WinInteractState *interState;
 };

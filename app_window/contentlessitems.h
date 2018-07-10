@@ -56,11 +56,6 @@ public:
         interState->nextIState(event,resizeHint);
     }
 
-    virtual void mouseMoveEvent(QMouseEvent *event)
-    {
-
-    }
-
 private:
     BasicInteractState::StateHint resizeHint;
 };

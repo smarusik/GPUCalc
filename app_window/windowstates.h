@@ -70,8 +70,9 @@ public:
         ResizeGen=ResizeHorizontal
                 |ResizeVertical
                 |ResizeDiagLeft
-                |ResizeDiagRight
+                |ResizeDiagRight,
 
+        Move=256
     };
 
     enum ResizeOrigin

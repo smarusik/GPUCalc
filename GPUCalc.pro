@@ -21,7 +21,8 @@ SOURCES += \
     app_window/windowstates.cpp \
     app_window/basicwindow.cpp \
     app_window/contentlessitems.cpp \
-    app_window/rubberband.cpp
+    app_window/rubberband.cpp \
+    app_window/titlebaritem.cpp
 
 RESOURCES += qml.qrc
 
@@ -43,7 +44,8 @@ HEADERS += \
     app_window/windowstates.h \
     app_window/basicwindow.h \
     app_window/contentlessitems.h \
-    app_window/rubberband.h
+    app_window/rubberband.h \
+    app_window/titlebaritem.h
 
 DISTFILES += \
     triangle.vert \

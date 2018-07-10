@@ -57,11 +57,6 @@ void BackgroundItem::geometryChanged(const QRectF &newGeometry, const QRectF &ol
     update();
 }
 
-void BackgroundItem::timerEvent(QTimerEvent *)
-{
-    return;
-}
-
 void BackgroundItem::setInterState(WinInteractState *value)
 {
     interState = value;
