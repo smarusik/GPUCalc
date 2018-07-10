@@ -22,7 +22,8 @@ SOURCES += \
     app_window/basicwindow.cpp \
     app_window/contentlessitems.cpp \
     app_window/rubberband.cpp \
-    app_window/titlebaritem.cpp
+    app_window/titlebaritem.cpp \
+    app_window/base_nodes/flatcolorrectangularnode.cpp
 
 RESOURCES += qml.qrc
 
@@ -45,7 +46,8 @@ HEADERS += \
     app_window/basicwindow.h \
     app_window/contentlessitems.h \
     app_window/rubberband.h \
-    app_window/titlebaritem.h
+    app_window/titlebaritem.h \
+    app_window/base_nodes/flatcolorrectangularnode.h
 
 DISTFILES += \
     triangle.vert \

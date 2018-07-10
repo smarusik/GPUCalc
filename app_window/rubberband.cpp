@@ -10,45 +10,16 @@ RubberBandItem::RubberBandItem(QQuickItem *parent):
     setAcceptedMouseButtons(Qt::NoButton);
     setAcceptHoverEvents(false);
 
-    bandNode=new QSGGeometryNode;
-
-    QSGGeometry *geometry;
-    QSGFlatColorMaterial *material;
-
-    geometry=new QSGGeometry(QSGGeometry::defaultAttributes_Point2D(),4);
-    geometry->setDrawingMode(QSGGeometry::DrawLineLoop);
-    geometry->setLineWidth(lineWidth);
-
-    material=new QSGFlatColorMaterial;
-    material->setFlag(QSGMaterial::Blending);
-
-    bandNode->setGeometry(geometry);
-    bandNode->setMaterial(material);
-    bandNode->setFlags(QSGNode::OwnsGeometry|QSGNode::OwnsMaterial,true);
+    bandNode=new FlatColorRectangularNode;
+    bandNode->geometry()->setDrawingMode(QSGGeometry::DrawLineLoop);
+    bandNode->geometry()->setLineWidth(lineWidth);
+    bandNode->setColor(Qt::red);
 }
 
 void RubberBandItem::setBounds(const QRect &value)
 {
     bounds=value;
-
-    QSGGeometry *geometry;
-    QSGFlatColorMaterial *material;
-
-    geometry=bandNode->geometry();
-    material=(QSGFlatColorMaterial*)bandNode->material();
-
-    QSGGeometry::Point2D* vertices= geometry->vertexDataAsPoint2D();
-    qreal x1,y1,x2,y2;
-    bounds.getCoords(&x1,&y1,&x2,&y2);
-    vertices[0].set(x1,y1);
-    vertices[1].set(x2,y1);
-    vertices[2].set(x2,y2);
-    vertices[3].set(x1,y2);
-
-    material->setColor(Qt::red);
-
-    bandNode->markDirty(QSGNode::DirtyGeometry);
-    bandNode->markDirty(QSGNode::DirtyMaterial);
+    bandNode->setBounds(bounds);
 
     update();
 }

@@ -9,52 +9,40 @@ color(Qt::gray)
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);
 
+    node=new FlatColorRectangularNode;
+    node->geometry()->setDrawingMode(GL_QUADS);
+
     startTimer(100);
 }
 
 QSGNode *BackgroundItem::updatePaintNode(QSGNode *prev, QQuickItem::UpdatePaintNodeData *)
 {
-    QSGGeometryNode *node=(QSGGeometryNode*)prev;
-    QSGGeometry *geometry;
-    QSGFlatColorMaterial *material;
+    QSGNode *oldNode=prev;
 
-    if(!node)
+    if(!oldNode)
     {
-        QSGGeometryNode *newNode=new QSGGeometryNode;
-
-        geometry=new QSGGeometry(QSGGeometry::defaultAttributes_Point2D(),4);
-        geometry->setDrawingMode(GL_QUADS);
-        newNode->setGeometry(geometry);
-
-        material=new QSGFlatColorMaterial;
-        newNode->setMaterial(material);
-
-        node=newNode;
-        node->setFlags(QSGNode::OwnsGeometry|QSGNode::OwnsMaterial,true);
-    }
-    else
-    {
-        geometry=node->geometry();
-        material=(QSGFlatColorMaterial*)node->material();
+        oldNode=new QSGNode;
+        oldNode->appendChildNode(node);
     }
 
-    QSGGeometry::Point2D* vertices= geometry->vertexDataAsPoint2D();
-    vertices[0].set(0,0);
-    vertices[1].set(width(),0);
-    vertices[2].set(width(),height());
-    vertices[3].set(0,height());
-
-    material->setColor(color);
-
-    node->markDirty(QSGNode::DirtyGeometry|QSGNode::DirtyMaterial);
-
-    return node;
+    return oldNode;
 }
 
 void BackgroundItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
-    update();
+    node->setBounds(QRectF(QPointF(0,0), newGeometry.size()));
+}
+
+QColor BackgroundItem::getColor() const
+{
+    return color;
+}
+
+void BackgroundItem::setColor(const QColor &value)
+{
+    color = value;
+    node->setColor(color);
 }
 
 void BackgroundItem::setInterState(WinInteractState *value)

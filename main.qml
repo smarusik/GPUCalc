@@ -9,7 +9,7 @@ VNAApplicationWindow{
     width: 500
     height: 500
 
-    titleBarContent: Rectangle{
-        color: "blue"
-    }
+//    titleBarContent: Rectangle{
+//        color: "blue"
+//    }
 }

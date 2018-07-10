@@ -1,6 +1,7 @@
 #ifndef RUBBERBAND_H
 #define RUBBERBAND_H
 
+#include "base_nodes/flatcolorrectangularnode.h"
 #include <QQuickItem>
 #include <QQuickWindow>
 
@@ -17,7 +18,7 @@ private:
     virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
 
     QRectF bounds;
-    QSGGeometryNode *bandNode;
+    FlatColorRectangularNode *bandNode;
     static constexpr quint16 lineWidth=2;
 };
 
