@@ -40,15 +40,17 @@ void RubberBandItem::setBounds(const QRect &value)
     QSGGeometry::Point2D* vertices= geometry->vertexDataAsPoint2D();
     qreal x1,y1,x2,y2;
     bounds.getCoords(&x1,&y1,&x2,&y2);
-    vertices[0].set(x1+lineWidth,y1+lineWidth);
-    vertices[1].set(x2-lineWidth,y1+lineWidth);
-    vertices[2].set(x2-lineWidth,y2-lineWidth);
-    vertices[3].set(x1+lineWidth,y2-lineWidth);
+    vertices[0].set(x1,y1);
+    vertices[1].set(x2,y1);
+    vertices[2].set(x2,y2);
+    vertices[3].set(x1,y2);
 
     material->setColor(Qt::red);
 
     bandNode->markDirty(QSGNode::DirtyGeometry);
     bandNode->markDirty(QSGNode::DirtyMaterial);
+
+    update();
 }
 
 QSGNode *RubberBandItem::updatePaintNode(QSGNode *prev, QQuickItem::UpdatePaintNodeData *)
@@ -67,5 +69,4 @@ QSGNode *RubberBandItem::updatePaintNode(QSGNode *prev, QQuickItem::UpdatePaintN
 void RubberBandItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     QQuickItem::geometryChanged(newGeometry,oldGeometry);
-    setBounds(newGeometry.toRect());
 }

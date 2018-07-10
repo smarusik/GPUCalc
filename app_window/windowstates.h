@@ -3,6 +3,7 @@
 
 #include "rubberband.h"
 #include <QQuickWindow>
+#include <QScreen>
 #include <QCursor>
 #include <QObject>
 #include <QMouseEvent>
@@ -24,7 +25,7 @@ public:
     bool rearrangeSubwindows();
     QCursor getCursor();
     bool isInResizingState();
-    bool trackMousePosition(const QPointF &pos);
+    void trackMousePosition(const QPointF &pos);
     const QRect &getStartGeometry();
     bool updateRubberBand();
 
@@ -32,15 +33,11 @@ public:
     void nextIState(QHoverEvent *event, quint32 hint=0);
 
     void setIState(BasicInteractState *value);
-
-    QPointF getMousePosition() const;
-
     void setStartGeometry(const QRect &value);
 
 private:
     QScopedPointer<BasicInteractState> iState;
     QQuickWindow *parentWindow;
-    QPointF mousePosition, stableCorner;
     QRect startGeometry;
 };
 
@@ -106,6 +103,11 @@ public:
         return false;
     }
 
+    virtual void trackMousePosition(const QPointF &)
+    {
+        return;
+    }
+
     virtual bool needFixResize()
     {
         return false;
@@ -118,11 +120,11 @@ public:
     virtual void nextState(WinInteractState *sMachine,
                                           QHoverEvent *event,
                                           quint32 hint=0)=0;
-    QPointF getMousePosition() const;
-
 protected:
     QCursor cursor;
     quint32 direction;
+    QPointF mousePosition;
+    QScopedPointer<RubberBandItem, QScopedPointerDeleteLater> rubberBand;
 };
 
 //Particular states of interaction
@@ -159,13 +161,145 @@ public:
 class ResizeProcess:public ResizeReady
 {
 public:
-    ResizeProcess(quint32 hint):
-        ResizeReady(hint)
+    ResizeProcess(quint32 hint, QQuickWindow *hW):
+        ResizeReady(hint),
+        hostWindow(hW)
     {
+
+        QRect newGeometry(hostWindow->screen()->availableGeometry().topLeft(),
+                          hostWindow->screen()->availableGeometry().bottomRight());
+        QRect oldGeometry=hostWindow->geometry();
+
+        if(direction&ResizeTop)
+        {
+            newGeometry.setLeft(oldGeometry.left());
+            newGeometry.setRight(oldGeometry.right());
+            newGeometry.setBottom(oldGeometry.bottom());
+        }
+        else if (direction&ResizeBottom) {
+            newGeometry.setLeft(oldGeometry.left());
+            newGeometry.setRight(oldGeometry.right());
+            newGeometry.setTop(oldGeometry.top());
+        }
+        else if (direction&ResizeLeft) {
+            newGeometry.setTop(oldGeometry.top());
+            newGeometry.setBottom(oldGeometry.bottom());
+            newGeometry.setRight(oldGeometry.right());
+        }
+        else if (direction&ResizeRight) {
+            newGeometry.setTop(oldGeometry.top());
+            newGeometry.setBottom(oldGeometry.bottom());
+            newGeometry.setLeft(oldGeometry.left());
+        }
+        else if (direction&ResizeLeftTop) {
+            newGeometry.setBottom(oldGeometry.bottom());
+            newGeometry.setRight(oldGeometry.right());
+        }
+        else if (direction&ResizeRightTop) {
+            newGeometry.setBottom(oldGeometry.bottom());
+            newGeometry.setLeft(oldGeometry.left());
+        }
+        else if (direction&ResizeLeftBottom) {
+            newGeometry.setTop(oldGeometry.top());
+            newGeometry.setRight(oldGeometry.right());
+        }
+        else if (direction&ResizeRightBottom) {
+            newGeometry.setTop(oldGeometry.top());
+            newGeometry.setLeft(oldGeometry.left());
+        }
+
+        hostWindow->setGeometry(newGeometry);
+        rubberBand.reset(new RubberBandItem(hostWindow->contentItem()));
+    }
+
+    virtual void trackMousePosition(const QPointF &pos) override
+    {
+        mousePosition=pos;
     }
 
     virtual bool updateRubberBand()
     {
+        if(!rubberBand)
+        {
+            return false;
+        }
+
+        QRect hwGeometry=hostWindow->geometry();
+
+        if(direction&ResizeTop)
+        {
+            rbGeometry.setLeft(hwGeometry.left());
+            rbGeometry.setRight(hwGeometry.right());
+            rbGeometry.setBottom(hwGeometry.bottom());
+
+            rbGeometry.setTop(mousePosition.y()<hwGeometry.bottom()?
+                                  mousePosition.y():hwGeometry.bottom());
+        }
+        else if (direction&ResizeBottom) {
+            rbGeometry.setLeft(hwGeometry.left());
+            rbGeometry.setRight(hwGeometry.right());
+            rbGeometry.setTop(hwGeometry.top());
+
+            rbGeometry.setBottom(mousePosition.y()>hwGeometry.top()?
+                                  mousePosition.y():hwGeometry.top());
+        }
+        else if (direction&ResizeLeft) {
+            rbGeometry.setTop(hwGeometry.top());
+            rbGeometry.setBottom(hwGeometry.bottom());
+            rbGeometry.setRight(hwGeometry.right());
+
+            rbGeometry.setLeft(mousePosition.x()<hwGeometry.right()?
+                                  mousePosition.x():hwGeometry.right());
+        }
+        else if (direction&ResizeRight) {
+            rbGeometry.setTop(hwGeometry.top());
+            rbGeometry.setBottom(hwGeometry.bottom());
+            rbGeometry.setLeft(hwGeometry.left());
+
+            rbGeometry.setRight(mousePosition.x()>hwGeometry.left()?
+                                  mousePosition.x():hwGeometry.left());
+        }
+        else if (direction&ResizeLeftTop) {
+            rbGeometry.setBottom(hwGeometry.bottom());
+            rbGeometry.setRight(hwGeometry.right());
+
+            rbGeometry.setLeft(mousePosition.x()<hwGeometry.right()?
+                                  mousePosition.x():hwGeometry.right());
+            rbGeometry.setTop(mousePosition.y()<hwGeometry.bottom()?
+                                  mousePosition.y():hwGeometry.bottom());
+        }
+        else if (direction&ResizeRightTop) {
+            rbGeometry.setBottom(hwGeometry.bottom());
+            rbGeometry.setLeft(hwGeometry.left());
+
+            rbGeometry.setTop(mousePosition.y()<hwGeometry.bottom()?
+                                  mousePosition.y():hwGeometry.top());
+            rbGeometry.setRight(mousePosition.x()>hwGeometry.left()?
+                                  mousePosition.x():hwGeometry.left());
+        }
+        else if (direction&ResizeLeftBottom) {
+            rbGeometry.setTop(hwGeometry.top());
+            rbGeometry.setRight(hwGeometry.right());
+
+            rbGeometry.setBottom(mousePosition.y()>hwGeometry.top()?
+                                  mousePosition.y():hwGeometry.top());
+            rbGeometry.setLeft(mousePosition.x()<hwGeometry.right()?
+                                  mousePosition.x():hwGeometry.right());
+
+        }
+        else if (direction&ResizeRightBottom) {
+            rbGeometry.setTop(hwGeometry.top());
+            rbGeometry.setLeft(hwGeometry.left());
+
+            rbGeometry.setBottom(mousePosition.y()>hwGeometry.top()?
+                                  mousePosition.y():hwGeometry.top());
+            rbGeometry.setRight(mousePosition.x()>hwGeometry.left()?
+                                  mousePosition.x():hwGeometry.left());
+        }
+
+        rubberBand->setBounds(QRect(hostWindow->contentItem()->mapFromGlobal(rbGeometry.topLeft()).toPoint(),
+                                    rbGeometry.size()));
+
         return true;
     }
 
@@ -177,6 +311,9 @@ public:
     virtual void nextState(WinInteractState *sMachine,
                                           QMouseEvent *event,
                                           quint32 hint) override;
+private:
+    QQuickWindow *hostWindow;
+    QRect rbGeometry;
 };
 
 class OrdinaryState:public BasicInteractState

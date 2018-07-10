@@ -38,14 +38,14 @@ private:
     virtual bool event(QEvent *event) override;
 
     void setDefaults();
-    void resizeInternals(const QSize &backgroundSize);
+    void resizeInternals(const QSize &bgSize);
+    void moveInternals(const QPoint &bgOrigin);
 
     QQuickItem *titleBar;
     BaseContentlessItem *workingArea;
     BorderItem *lBorder,*rBorder,*tBorder,*bBorder,
                         *lbCorner,*rbCorner,*ltCorner,*rtCorner;
     BackgroundItem *background;
-    QScopedPointer<RubberBandItem, QScopedPointerDeleteLater> rubberBand;
 
     WinInteractState interState;
 

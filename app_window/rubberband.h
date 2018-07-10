@@ -18,7 +18,7 @@ private:
 
     QRectF bounds;
     QSGGeometryNode *bandNode;
-    static constexpr quint16 lineWidth=5;
+    static constexpr quint16 lineWidth=2;
 };
 
 #endif // RUBBERBAND_H

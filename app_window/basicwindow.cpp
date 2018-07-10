@@ -46,32 +46,20 @@ BasicWindow::BasicWindow(QWindow *parent):
 
 void BasicWindow::resizeEvent(QResizeEvent *event)
 {
-    QSize backgroundSize;
-
-    if(interState.isInResizingState())
+    if(!interState.isInResizingState())
     {
-        backgroundSize=interState.getStartGeometry().size();
-
-        if(!rubberBand)
-        {
-            rubberBand.reset(new RubberBandItem(contentItem()));
-        }
-
-        rubberBand->setBounds(QRect(0,0,size().width(),size().height()));
-    }
-    else
-    {
-        backgroundSize=event->size();
-        resizeInternals(backgroundSize);
-        interState.setStartGeometry(geometry());
+        resizeInternals(event->size());
+        moveInternals(QPoint(0,0));
     }
 }
 
 void BasicWindow::moveEvent(QMoveEvent *event)
 {
-    QQuickWindow::moveEvent(event);
+    if(interState.isInResizingState())
+    {
+        moveInternals(-event->pos()+event->oldPos());
+    }
 }
-
 
 
 void BasicWindow::mousePressEvent(QMouseEvent *event)
@@ -81,16 +69,6 @@ void BasicWindow::mousePressEvent(QMouseEvent *event)
 
 void BasicWindow::mouseReleaseEvent(QMouseEvent *event)
 {
-    interState.nextIState(event);
-    if(!interState.updateRubberBand())
-    {
-        setGeometry(QRect(interState.getStartGeometry().topLeft(),
-                    interState.getMousePosition().toPoint()));
-
-        qDebug()<<QRect(interState.getStartGeometry().topLeft(),
-                        interState.getMousePosition().toPoint());
-    }
-
     QQuickWindow::mouseReleaseEvent(event);
 }
 
@@ -111,14 +89,9 @@ void BasicWindow::setDefaults()
     titleBarHeight=20;
 }
 
-void BasicWindow::resizeInternals(const QSize &backgroundSize)
+void BasicWindow::resizeInternals(const QSize &bgSize)
 {
-    rubberBand.reset();
-
-    background->setPosition(contentItem()->position());
-    background->setSize(backgroundSize);
-
-    workingArea->setPosition(background->position()+QPointF(frameWidth,frameWidth));
+    background->setSize(bgSize);
     workingArea->setSize(background->size()-2*QSizeF(frameWidth,frameWidth));
 
     if(titleBar)
@@ -127,31 +100,36 @@ void BasicWindow::resizeInternals(const QSize &backgroundSize)
         titleBar->setSize(QSizeF(background->width()-2*frameWidth,titleBarHeight));
     }
 
-    lBorder->setPosition(QPointF(0,frameWidth*2));
-    lBorder->setSize(QSizeF(frameWidth,backgroundSize.height()-frameWidth*4));
-
-    rBorder->setPosition(lBorder->position()+QPointF(backgroundSize.width()-frameWidth,0));
+    lBorder->setSize(QSizeF(frameWidth,bgSize.height()-frameWidth*4));
     rBorder->setSize(lBorder->size());
-
-    tBorder->setPosition(QPointF(frameWidth*2,0));
-    tBorder->setSize(QSizeF(backgroundSize.width()-frameWidth*4,frameWidth));
-
-    bBorder->setPosition(tBorder->position()+QPointF(0,backgroundSize.height()-frameWidth));
+    tBorder->setSize(QSizeF(bgSize.width()-frameWidth*4,frameWidth));
     bBorder->setSize(tBorder->size());
 
     QSizeF cornerSize(frameWidth*2,frameWidth*2);
-
-    ltCorner->setPosition(QPointF(0,0));
     ltCorner->setSize(cornerSize);
-
-    rtCorner->setPosition(QPointF(backgroundSize.width()-frameWidth*2,0));
     rtCorner->setSize(cornerSize);
-
-    lbCorner->setPosition(QPointF(0,backgroundSize.height()-frameWidth*2));
     lbCorner->setSize(cornerSize);
-
-    rbCorner->setPosition(QPointF(backgroundSize.width()-frameWidth*2,backgroundSize.height()-frameWidth*2));
     rbCorner->setSize(cornerSize);
+}
+
+void BasicWindow::moveInternals(const QPoint &bgOrigin)
+{
+    background->setPosition(bgOrigin);
+    workingArea->setPosition(background->position()+QPointF(frameWidth,frameWidth));
+
+    if(titleBar)
+    {
+        titleBar->setPosition(background->position()+QPointF(frameWidth,frameWidth));
+    }
+
+    lBorder->setPosition(QPointF(0,frameWidth*2));
+    rBorder->setPosition(lBorder->position()+QPointF(background->width()-frameWidth,0));
+    tBorder->setPosition(QPointF(frameWidth*2,0));
+    bBorder->setPosition(tBorder->position()+QPointF(0,background->height()-frameWidth));
+    ltCorner->setPosition(QPointF(0,0));
+    rtCorner->setPosition(QPointF(background->width()-frameWidth*2,0));
+    lbCorner->setPosition(QPointF(0,background->height()-frameWidth*2));
+    rbCorner->setPosition(QPointF(background->width()-frameWidth*2,background->height()-frameWidth*2));
 }
 
 BaseContentlessItem *BasicWindow::getWorkingArea() const
@@ -169,6 +147,7 @@ void BasicWindow::setWorkingArea(BaseContentlessItem *value)
 void BasicWindow::timerEvent(QTimerEvent *)
 {
     setCursor(interState.getCursor());
+    interState.updateRubberBand();
 }
 
 QQuickItem *BasicWindow::getTitleBar() const

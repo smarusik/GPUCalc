@@ -22,9 +22,9 @@ bool WinInteractState::isInResizingState()
     return iState->isInResizingState();
 }
 
-bool WinInteractState::trackMousePosition(const QPointF &pos)
+void WinInteractState::trackMousePosition(const QPointF &pos)
 {
-    mousePosition=pos;
+    iState->trackMousePosition(pos);
 }
 
 const QRect &WinInteractState::getStartGeometry()
@@ -52,12 +52,18 @@ void WinInteractState::setIState(BasicInteractState *value)
     iState.reset(value);
 }
 
+void WinInteractState::setStartGeometry(const QRect &value)
+{
+    startGeometry = value;
+}
+
 void ResizeReady::nextState(WinInteractState *sMachine, QMouseEvent *event, quint32 hint)
 {
     if(event->type()&QEvent::MouseButtonPress
             && event->button()&Qt::LeftButton)
     {
-        sMachine->setIState(new ResizeProcess(hint));
+        sMachine->setIState(new ResizeProcess(hint,sMachine->parentWindow));
+        sMachine->trackMousePosition(event->screenPos());
     }
 }
 
@@ -70,6 +76,17 @@ void ResizeReady::nextState(WinInteractState *sMachine, QHoverEvent *event, quin
     else if(event->type()&QEvent::HoverLeave)
     {
         sMachine->setIState(new OrdinaryState);
+    }
+}
+
+void ResizeProcess::nextState(WinInteractState *sMachine, QMouseEvent *event, quint32 hint)
+{
+    if(event->type()&QEvent::MouseButtonRelease
+            && event->button()&Qt::LeftButton)
+    {
+        QRect newWindowGeometry(rbGeometry);
+        sMachine->setIState(new OrdinaryState);
+        sMachine->parentWindow->setGeometry(newWindowGeometry);
     }
 }
 
@@ -86,24 +103,5 @@ void OrdinaryState::nextState(WinInteractState *sMachine, QHoverEvent *event, qu
         {
             sMachine->setIState(new ResizeReady(hint));
         }
-    }
-}
-
-QPointF WinInteractState::getMousePosition() const
-{
-    return mousePosition;
-}
-
-void WinInteractState::setStartGeometry(const QRect &value)
-{
-    startGeometry = value;
-}
-
-void ResizeProcess::nextState(WinInteractState *sMachine, QMouseEvent *event, quint32 hint)
-{
-    if(event->type()&QEvent::MouseButtonRelease
-            && event->button()&Qt::LeftButton)
-    {
-        sMachine->setIState(new OrdinaryState);
     }
 }

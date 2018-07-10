@@ -46,6 +46,8 @@ QSGNode *BackgroundItem::updatePaintNode(QSGNode *prev, QQuickItem::UpdatePaintN
 
     material->setColor(color);
 
+    node->markDirty(QSGNode::DirtyGeometry|QSGNode::DirtyMaterial);
+
     return node;
 }
 
