@@ -2,7 +2,7 @@
 #define CALCITEM_H
 
 #include "base_nodes/flatcolorrectangularnode.h"
-#include "windowstates.h"
+#include "interaction/wininteractstate.h"
 #include <QQuickItem>
 
 class BackgroundItem : public QQuickItem

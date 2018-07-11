@@ -1,36 +1,15 @@
 #ifndef WORKAREAITEM_H
 #define WORKAREAITEM_H
 
-#include "windowstates.h"
-#include <QQuickItem>
+#include "base_items/basiccontentlessitem.h"
 
-class BaseContentlessItem : public QQuickItem
-{
-    Q_OBJECT
-public:
-    BaseContentlessItem(QQuickItem *parent=nullptr);
-
-    void setInterState(WinInteractState *value);
-
-protected:
-    virtual void timerEvent(QTimerEvent *);
-
-    //mouse events
-    virtual void mousePressEvent(QMouseEvent *event);
-    virtual void mouseReleaseEvent(QMouseEvent *event);
-    virtual void hoverEnterEvent(QHoverEvent *event);
-    virtual void hoverLeaveEvent(QHoverEvent *event);
-
-    WinInteractState *interState;
-};
-
-class BorderItem: public BaseContentlessItem
+class BorderItem: public BasicContentlessItem
 {
 public:
     BorderItem(QQuickItem *parent,
                BasicInteractState::StateHint rh
                ):
-        BaseContentlessItem(parent),
+        BasicContentlessItem(parent),
         resizeHint(rh)
     {
 

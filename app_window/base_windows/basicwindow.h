@@ -1,36 +1,38 @@
 #ifndef ITEMWINDOW_H
 #define ITEMWINDOW_H
 
-#include "windowstates.h"
+#include "interaction/wininteractstate.h"
 #include "backgrounditem.h"
-#include "contentlessitems.h"
-#include "titlebaritem.h"
+#include "item_impl/borderitem.h"
+#include "item_impl/titlebaritem.h"
+#include "item_impl/statusbaritem.h"
 #include <QQuickWindow>
 #include <QPointer>
 
 class BasicWindow : public QQuickWindow
 {
     Q_OBJECT
-    Q_PROPERTY(QQuickItem* titleBarContent READ getTitleBarContent
-               WRITE setTitleBarContent NOTIFY titleBarContentChanged)
-    Q_PROPERTY(BaseContentlessItem* workingArea READ getWorkingArea WRITE setWorkingArea)
+    Q_PROPERTY(TitleBarItem* titleBar READ getTitleBar
+               WRITE setTitleBar NOTIFY titleBarChanged)
+    Q_PROPERTY(StatusBarItem* statusBar READ getStatusBar
+               WRITE setStatusBar NOTIFY statusBarChanged)
 public:
     BasicWindow(QWindow *parent=nullptr);
     virtual ~BasicWindow()
     {}
 
-    // QWindow interface
-    QQuickItem *getTitleBarContent() const;
-    void setTitleBarContent(QQuickItem *value);
+    TitleBarItem *getTitleBar() const;
+    void setTitleBar(TitleBarItem *value);
 
-    BaseContentlessItem *getWorkingArea() const;
-    void setWorkingArea(BaseContentlessItem *value);
+    StatusBarItem *getStatusBar() const;
+    void setStatusBar(StatusBarItem *value);
 
 signals:
-    void titleBarContentChanged(QQuickItem *titleBarContent);
+    void titleBarChanged(TitleBarItem *tBar);
+    void statusBarChanged(TitleBarItem *sBar);
 
-private:
-    virtual void timerEvent(QTimerEvent *);
+protected:
+    virtual void timerEvent(QTimerEvent *) override;
 
     virtual void resizeEvent(QResizeEvent *event) override;
     virtual void moveEvent(QMoveEvent *event) override;
@@ -43,9 +45,9 @@ private:
     void resizeInternals(const QSize &bgSize);
     void moveInternals(const QPoint &bgOrigin);
 
-    TitleBarItem *titleBar;
-    QQuickItem *titleBarContent;
-    BaseContentlessItem *workingArea;
+    QPointer<TitleBarItem> titleBar;
+    QPointer<StatusBarItem> statusBar;
+    BasicContentlessItem *workingArea;
     BorderItem *lBorder,*rBorder,*tBorder,*bBorder,
                         *lbCorner,*rbCorner,*ltCorner,*rtCorner;
     BackgroundItem *background;
@@ -53,7 +55,7 @@ private:
     WinInteractState interState;
 
     quint16 frameWidth;
-    quint16 titleBarHeight;
+    quint16 titleBarHeight, statusBarHeight;
 };
 
 

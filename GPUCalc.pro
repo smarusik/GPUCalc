@@ -18,12 +18,20 @@ SOURCES += \
     trianglenode.cpp \
     app_window/backgrounditem.cpp \
     app_window/main.cpp \
-    app_window/windowstates.cpp \
-    app_window/basicwindow.cpp \
-    app_window/contentlessitems.cpp \
     app_window/rubberband.cpp \
-    app_window/titlebaritem.cpp \
-    app_window/base_nodes/flatcolorrectangularnode.cpp
+    app_window/base_nodes/flatcolorrectangularnode.cpp \
+    app_window/base_items/basicbaritem.cpp \
+    app_window/base_items/basiccontentlessitem.cpp \
+    app_window/item_impl/borderitem.cpp \
+    app_window/item_impl/statusbaritem.cpp \
+    app_window/item_impl/titlebaritem.cpp \
+    app_window/window_impl/vnaappwindow.cpp \
+    app_window/base_windows/basicwindow.cpp \
+    app_window/interaction/wininteractstate.cpp \
+    app_window/interaction/resizeready.cpp \
+    app_window/interaction/resizeprocess.cpp \
+    app_window/interaction/moveprocess.cpp \
+    app_window/interaction/idleprocess.cpp
 
 RESOURCES += qml.qrc
 
@@ -41,13 +49,21 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     trianglenode.h \
     texturenode.h \
-    app_window/backgrounditem.h \
-    app_window/windowstates.h \
-    app_window/basicwindow.h \
-    app_window/contentlessitems.h \
     app_window/rubberband.h \
-    app_window/titlebaritem.h \
-    app_window/base_nodes/flatcolorrectangularnode.h
+    app_window/base_nodes/flatcolorrectangularnode.h \
+    app_window/base_items/basicbaritem.h \
+    app_window/base_items/basiccontentlessitem.h \
+    app_window/item_impl/borderitem.h \
+    app_window/backgrounditem.h \
+    app_window/item_impl/statusbaritem.h \
+    app_window/item_impl/titlebaritem.h \
+    app_window/window_impl/vnaappwindow.h \
+    app_window/base_windows/basicwindow.h \
+    app_window/interaction/wininteractstate.h \
+    app_window/interaction/resizeready.h \
+    app_window/interaction/resizeprocess.h \
+    app_window/interaction/moveprocess.h \
+    app_window/interaction/idleprocess.h
 
 DISTFILES += \
     triangle.vert \

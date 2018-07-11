@@ -1,15 +1,14 @@
 #include "basicwindow.h"
+#include "interaction/idleprocess.h"
 
 BasicWindow::BasicWindow(QWindow *parent):
     QQuickWindow(parent),
     interState(this)
 {
-    setPosition(QPoint(100,100));
-
     setColor(Qt::transparent);
     setDefaults();
 
-    interState.setIState(new OrdinaryState);
+    interState.setIState(new IdleProcess);
 
     background=new BackgroundItem;
     background->setParentItem(contentItem());
@@ -17,12 +16,8 @@ BasicWindow::BasicWindow(QWindow *parent):
     background->setInterState(&interState);
     background->setColor(Qt::gray);
 
-    workingArea=new BaseContentlessItem(background);
+    workingArea=new BasicContentlessItem(background);
     workingArea->setInterState(&interState);
-
-    titleBar=new TitleBarItem(background);
-    titleBar->setColor(Qt::blue);
-    titleBar->setInterState(&interState);
 
     lBorder=new BorderItem(background,BasicInteractState::ResizeLeft);
     lBorder->setInterState(&interState);
@@ -79,7 +74,7 @@ void BasicWindow::mouseReleaseEvent(QMouseEvent *event)
 
 void BasicWindow::mouseMoveEvent(QMouseEvent *event)
 {
-    interState.trackMousePosition(event->screenPos());
+    interState.trackMousePosition(event->globalPos());
     QQuickWindow::mouseMoveEvent(event);
 }
 
@@ -92,6 +87,7 @@ void BasicWindow::setDefaults()
 {
     frameWidth=5;
     titleBarHeight=20;
+    statusBarHeight=20;
 }
 
 void BasicWindow::resizeInternals(const QSize &bgSize)
@@ -99,7 +95,15 @@ void BasicWindow::resizeInternals(const QSize &bgSize)
     background->setSize(bgSize);
     workingArea->setSize(background->size()-2*QSizeF(frameWidth,frameWidth));
 
-    titleBar->setSize(QSizeF(background->width()-2*frameWidth,titleBarHeight));
+    if(titleBar)
+    {
+        titleBar->setSize(QSizeF(background->width()-2*frameWidth,titleBarHeight));
+    }
+
+    if(statusBar)
+    {
+        statusBar->setSize(QSizeF(background->width()-2*frameWidth,titleBarHeight));
+    }
 
     lBorder->setSize(QSizeF(frameWidth,bgSize.height()-frameWidth*4));
     rBorder->setSize(lBorder->size());
@@ -117,7 +121,17 @@ void BasicWindow::moveInternals(const QPoint &bgOrigin)
 {
     background->setPosition(bgOrigin);
     workingArea->setPosition(QPointF(frameWidth,frameWidth+titleBarHeight));
-    titleBar->setPosition(QPointF(frameWidth,frameWidth));
+
+    if(titleBar)
+    {
+        titleBar->setPosition(QPointF(frameWidth,frameWidth));
+    }
+
+    if(statusBar)
+    {
+        statusBar->setPosition(QPointF(frameWidth,background->height()-frameWidth-statusBar->height()));
+    }
+
     lBorder->setPosition(QPointF(0,frameWidth*2));
     rBorder->setPosition(lBorder->position()+QPointF(background->width()-frameWidth,0));
     tBorder->setPosition(QPointF(frameWidth*2,0));
@@ -128,16 +142,15 @@ void BasicWindow::moveInternals(const QPoint &bgOrigin)
     rbCorner->setPosition(QPointF(background->width()-frameWidth*2,background->height()-frameWidth*2));
 }
 
-BaseContentlessItem *BasicWindow::getWorkingArea() const
+StatusBarItem *BasicWindow::getStatusBar() const
 {
-    return workingArea;
+    return statusBar;
 }
 
-void BasicWindow::setWorkingArea(BaseContentlessItem *value)
+void BasicWindow::setStatusBar(StatusBarItem *value)
 {
-    workingArea = value;
-    workingArea->setParentItem(background);
-    workingArea->setVisible(true);
+    statusBar = value;
+    statusBar->setParentItem(background);
 }
 
 void BasicWindow::timerEvent(QTimerEvent *)
@@ -146,14 +159,14 @@ void BasicWindow::timerEvent(QTimerEvent *)
     interState.updateRubberBand();
 }
 
-QQuickItem *BasicWindow::getTitleBarContent() const
+TitleBarItem *BasicWindow::getTitleBar() const
 {
-    return titleBarContent;
+    return titleBar;
 }
 
-void BasicWindow::setTitleBarContent(QQuickItem *value)
+void BasicWindow::setTitleBar(TitleBarItem *value)
 {
-    titleBarContent = value;
-    titleBarContent->setParentItem(titleBar);
-    titleBarContent->setVisible(true);
+    titleBar = value;
+    titleBar->setParentItem(background);
+    titleBar->setInterState(&interState);
 }
