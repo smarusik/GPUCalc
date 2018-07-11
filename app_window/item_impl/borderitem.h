@@ -8,32 +8,15 @@ class BorderItem: public BasicContentlessItem
 public:
     BorderItem(QQuickItem *parent,
                BasicInteractState::StateHint rh
-               ):
-        BasicContentlessItem(parent),
-        resizeHint(rh)
-    {
+               );
 
-    }
+    virtual void hoverEnterEvent(QHoverEvent *event);
 
-    virtual void hoverEnterEvent(QHoverEvent *event)
-    {
-        interState->nextIState(event,resizeHint);
-    }
+    virtual void hoverLeaveEvent(QHoverEvent *event);
 
-    virtual void hoverLeaveEvent(QHoverEvent *event)
-    {
-        interState->nextIState(event,resizeHint);
-    }
+    virtual void mousePressEvent(QMouseEvent *event);
 
-    virtual void mousePressEvent(QMouseEvent *event)
-    {
-        interState->nextIState(event,resizeHint);
-    }
-
-    virtual void mouseReleaseEvent(QMouseEvent *event)
-    {
-        interState->nextIState(event,resizeHint);
-    }
+    virtual void mouseReleaseEvent(QMouseEvent *event);
 
 private:
     BasicInteractState::StateHint resizeHint;

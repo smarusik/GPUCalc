@@ -5,54 +5,8 @@ ResizeProcess::ResizeProcess(quint32 hint, QQuickWindow *hW):
     ResizeReady(hint),
     hostWindow(hW)
 {
-
-    QRect newGeometry(hostWindow->screen()->virtualGeometry().topLeft(),
-                      hostWindow->screen()->virtualGeometry().bottomRight());
-    qDebug()<<newGeometry;
-    QRect oldGeometry=hostWindow->geometry();
-    qDebug()<<oldGeometry;
-
-    if(direction&ResizeTop)
-    {
-        newGeometry.setLeft(oldGeometry.left());
-        newGeometry.setRight(oldGeometry.right());
-        newGeometry.setBottom(oldGeometry.bottom());
-    }
-    else if (direction&ResizeBottom) {
-        newGeometry.setLeft(oldGeometry.left());
-        newGeometry.setRight(oldGeometry.right());
-        newGeometry.setTop(oldGeometry.top());
-    }
-    else if (direction&ResizeLeft) {
-        newGeometry.setTop(oldGeometry.top());
-        newGeometry.setBottom(oldGeometry.bottom());
-        newGeometry.setRight(oldGeometry.right());
-    }
-    else if (direction&ResizeRight) {
-        newGeometry.setTop(oldGeometry.top());
-        newGeometry.setBottom(oldGeometry.bottom());
-        newGeometry.setLeft(oldGeometry.left());
-    }
-    else if (direction&ResizeLeftTop) {
-        newGeometry.setBottom(oldGeometry.bottom());
-        newGeometry.setRight(oldGeometry.right());
-    }
-    else if (direction&ResizeRightTop) {
-        newGeometry.setBottom(oldGeometry.bottom());
-        newGeometry.setLeft(oldGeometry.left());
-    }
-    else if (direction&ResizeLeftBottom) {
-        newGeometry.setTop(oldGeometry.top());
-        newGeometry.setRight(oldGeometry.right());
-    }
-    else if (direction&ResizeRightBottom) {
-        newGeometry.setTop(oldGeometry.top());
-        newGeometry.setLeft(oldGeometry.left());
-    }
-
-    qDebug()<<newGeometry;
-    hostWindow->setGeometry(newGeometry);
-
+    hwGeometry=hostWindow->geometry();
+    hostWindow->setGeometry(hostWindow->screen()->availableVirtualGeometry());
     rubberBand.reset(new RubberBandItem(hostWindow->contentItem()));
 }
 
@@ -68,49 +22,30 @@ bool ResizeProcess::updateRubberBand()
         return false;
     }
 
-    QRect hwGeometry=hostWindow->geometry();
+    rbGeometry=hwGeometry;
 
     if(direction&ResizeTop)
     {
-        rbGeometry.setLeft(hwGeometry.left());
-        rbGeometry.setRight(hwGeometry.right());
-        rbGeometry.setBottom(hwGeometry.bottom());
-
         rbGeometry.setTop(mousePosition.y()<hwGeometry.bottom()?
                               mousePosition.y():hwGeometry.bottom());
     }
     else if (direction&ResizeBottom)
     {
-        rbGeometry.setLeft(hwGeometry.left());
-        rbGeometry.setRight(hwGeometry.right());
-        rbGeometry.setTop(hwGeometry.top());
-
         rbGeometry.setBottom(mousePosition.y()>hwGeometry.top()?
                                  mousePosition.y():hwGeometry.top());
     }
     else if (direction&ResizeLeft)
     {
-        rbGeometry.setTop(hwGeometry.top());
-        rbGeometry.setBottom(hwGeometry.bottom());
-        rbGeometry.setRight(hwGeometry.right());
-
         rbGeometry.setLeft(mousePosition.x()<hwGeometry.right()?
                                mousePosition.x():hwGeometry.right());
     }
     else if (direction&ResizeRight)
     {
-        rbGeometry.setTop(hwGeometry.top());
-        rbGeometry.setBottom(hwGeometry.bottom());
-        rbGeometry.setLeft(hwGeometry.left());
-
         rbGeometry.setRight(mousePosition.x()>hwGeometry.left()?
                                 mousePosition.x():hwGeometry.left());
     }
     else if (direction&ResizeLeftTop)
     {
-        rbGeometry.setBottom(hwGeometry.bottom());
-        rbGeometry.setRight(hwGeometry.right());
-
         rbGeometry.setLeft(mousePosition.x()<hwGeometry.right()?
                                mousePosition.x():hwGeometry.right());
         rbGeometry.setTop(mousePosition.y()<hwGeometry.bottom()?
@@ -118,9 +53,6 @@ bool ResizeProcess::updateRubberBand()
     }
     else if (direction&ResizeRightTop)
     {
-        rbGeometry.setBottom(hwGeometry.bottom());
-        rbGeometry.setLeft(hwGeometry.left());
-
         rbGeometry.setTop(mousePosition.y()<hwGeometry.bottom()?
                               mousePosition.y():hwGeometry.top());
         rbGeometry.setRight(mousePosition.x()>hwGeometry.left()?
@@ -128,9 +60,6 @@ bool ResizeProcess::updateRubberBand()
     }
     else if (direction&ResizeLeftBottom)
     {
-        rbGeometry.setTop(hwGeometry.top());
-        rbGeometry.setRight(hwGeometry.right());
-
         rbGeometry.setBottom(mousePosition.y()>hwGeometry.top()?
                                  mousePosition.y():hwGeometry.top());
         rbGeometry.setLeft(mousePosition.x()<hwGeometry.right()?
@@ -139,9 +68,6 @@ bool ResizeProcess::updateRubberBand()
     }
     else if (direction&ResizeRightBottom)
     {
-        rbGeometry.setTop(hwGeometry.top());
-        rbGeometry.setLeft(hwGeometry.left());
-
         rbGeometry.setBottom(mousePosition.y()>hwGeometry.top()?
                                  mousePosition.y():hwGeometry.top());
         rbGeometry.setRight(mousePosition.x()>hwGeometry.left()?

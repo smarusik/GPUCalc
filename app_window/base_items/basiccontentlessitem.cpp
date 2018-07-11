@@ -8,8 +8,6 @@ BasicContentlessItem::BasicContentlessItem(QQuickItem *parent):
     setAcceptHoverEvents(true);
     setParentItem(parent);
 
-    setFlag(QQuickItem::ItemAcceptsDrops);
-
     startTimer(100);
 }
 

@@ -20,6 +20,7 @@ public:
 private:
     QQuickWindow *hostWindow;
     QRect rbGeometry;
+    QRect hwGeometry;
 };
 
 #endif // RESIZEPROCESS_H

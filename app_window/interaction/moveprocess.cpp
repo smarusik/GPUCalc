@@ -8,10 +8,7 @@ MoveProcess::MoveProcess(quint32 hint, QQuickWindow *hW):
     cursor=Qt::ClosedHandCursor;
 
     originalPos=hostWindow->geometry();
-
-    QRect newGeometry(hostWindow->screen()->virtualGeometry().topLeft(),
-                      hostWindow->screen()->virtualGeometry().bottomRight());
-    hostWindow->setGeometry(newGeometry);
+    hostWindow->setGeometry(hostWindow->screen()->virtualGeometry());
     rubberBand.reset(new RubberBandItem(hostWindow->contentItem()));
 }
 
