@@ -41,8 +41,5 @@ void TitleBarItem::hoverLeaveEvent(QHoverEvent *event)
 
 void TitleBarItem::setInterState(WinInteractState *value)
 {
-    if(interState)
-    {
-        interState = value;
-    }
+    interState = value;
 }

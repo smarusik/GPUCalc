@@ -6,7 +6,7 @@
 VNAAppWindow::VNAAppWindow(QWindow *parent):
     BasicWindow(parent)
 {
-    for(int i=0; i<101; i++)
+    for(int i=0; i<21; i++)
     {
         BasicDockItem *item=new BasicDockItem(workingArea);
 
@@ -17,14 +17,18 @@ VNAAppWindow::VNAAppWindow(QWindow *parent):
     }
 }
 
-void VNAAppWindow::arrangeDockables()
+bool VNAAppWindow::arrangeDockables()
 {
     qreal dockablesNum=dockables.size();
-    qreal ratio=std::floor(workingArea->width()/workingArea->height()+.5);
+    qreal ratio=workingArea->width()/workingArea->height();
+
+    if(ratio<=0)
+    {
+        return false;
+    }
 
     qreal rRows=std::sqrt(dockablesNum/ratio);
-
-    int rows=std::ceil(rRows);
+    int rows=rRows>=dockablesNum?dockablesNum:std::ceil(rRows);
     int columns=std::ceil(dockablesNum/rows);
 
     std::div_t distr=std::div(dockablesNum,columns);
@@ -50,10 +54,18 @@ void VNAAppWindow::arrangeDockables()
             dockables[i*columns+j]->update();
         }
     }
+
+    return true;
 }
 
 void VNAAppWindow::resizeEvent(QResizeEvent *event)
 {
     BasicWindow::resizeEvent(event);
+
     arrangeDockables();
+//    if(!arrangeDockables())
+//    {
+//        setHeight(event->oldSize().height());
+//        setWidth(event->oldSize().width());
+//    }
 }

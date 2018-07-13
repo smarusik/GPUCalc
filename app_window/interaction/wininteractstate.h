@@ -24,7 +24,6 @@ class WinInteractState : public QObject
 public:
     explicit WinInteractState(QQuickWindow *parent);
 
-    bool rearrangeSubwindows();
     QCursor getCursor();
     bool isInResizingState();
     void trackMousePosition(const QPointF &pos);
@@ -85,12 +84,6 @@ public:
         FromLeft=4,
         FromRight=8
     };
-
-    virtual bool rearrangeSubwindows()
-    {
-        return false;
-    }
-
 
     virtual QCursor getCursor()
     {

@@ -12,6 +12,10 @@ BasicDockItem::BasicDockItem(QQuickItem *parent):
 
     workingArea=new BackgroundItem(background);
     workingArea->setColor(Qt::white);
+
+    titleBar=new TitleBarItem(background);
+    statusBar=new StatusBarItem(background);
+
 }
 
 QSGNode *BasicDockItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNodeData *)
@@ -30,13 +34,15 @@ void BasicDockItem::geometryChanged(const QRectF &newGeometry, const QRectF &old
 {
     resizeInternals(newGeometry.size());
     moveInternals(newGeometry.topLeft());
+
+    QQuickItem::geometryChanged(newGeometry,oldGeometry);
 }
 
 void BasicDockItem::setDefaults()
 {
-    frameWidth=5;
-    titleBarHeight=20;
-    statusBarHeight=20;
+    frameWidth=2;
+    titleBarHeight=15;
+    statusBarHeight=15;
 }
 
 void BasicDockItem::resizeInternals(const QSizeF &bgSize)
@@ -46,12 +52,14 @@ void BasicDockItem::resizeInternals(const QSizeF &bgSize)
 
     if(titleBar)
     {
+        titleBar->setColor(Qt::blue);
         titleBar->setSize(QSizeF(background->width()-2*frameWidth,titleBarHeight));
         workingArea->setHeight(workingArea->height()-titleBarHeight);
     }
 
     if(statusBar)
     {
+        statusBar->setColor(Qt::magenta);
         statusBar->setSize(QSizeF(background->width()-2*frameWidth,statusBarHeight));
         workingArea->setHeight(workingArea->height()-statusBarHeight);
     }

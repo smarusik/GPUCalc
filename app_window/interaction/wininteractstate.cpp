@@ -8,11 +8,6 @@ WinInteractState::WinInteractState(QQuickWindow *parent) :
     iState.reset(new IdleProcess);
 }
 
-bool WinInteractState::rearrangeSubwindows()
-{
-    return iState->rearrangeSubwindows();
-}
-
 QCursor WinInteractState::getCursor()
 {
     return iState->getCursor();

@@ -15,7 +15,7 @@ public:
     virtual ~VNAAppWindow()
     {}
 
-    void arrangeDockables();
+    bool arrangeDockables();
 
 
 private:

@@ -21,7 +21,7 @@ private:
     virtual void hoverEnterEvent(QHoverEvent *event);
     virtual void hoverLeaveEvent(QHoverEvent *event);
 
-    WinInteractState *interState;
+    QPointer<WinInteractState> interState;
 };
 
 #endif // TITLEBARITEM_H
