@@ -9,7 +9,7 @@ class BackgroundItem : public QQuickItem
 {
     Q_OBJECT
 public:
-    BackgroundItem();
+    BackgroundItem(QQuickItem *parent=nullptr);
 
     void setInterState(WinInteractState *value);
 

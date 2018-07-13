@@ -50,6 +50,9 @@ public:
     BasicInteractState()
     {}
 
+    virtual ~BasicInteractState()
+    {}
+
     enum StateHint
     {
         ResizeTop=1,

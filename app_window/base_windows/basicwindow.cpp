@@ -98,11 +98,13 @@ void BasicWindow::resizeInternals(const QSize &bgSize)
     if(titleBar)
     {
         titleBar->setSize(QSizeF(background->width()-2*frameWidth,titleBarHeight));
+        workingArea->setHeight(workingArea->height()-titleBarHeight);
     }
 
     if(statusBar)
     {
-        statusBar->setSize(QSizeF(background->width()-2*frameWidth,titleBarHeight));
+        statusBar->setSize(QSizeF(background->width()-2*frameWidth,statusBarHeight));
+        workingArea->setHeight(workingArea->height()-statusBarHeight);
     }
 
     lBorder->setSize(QSizeF(frameWidth,bgSize.height()-frameWidth*4));
@@ -120,11 +122,12 @@ void BasicWindow::resizeInternals(const QSize &bgSize)
 void BasicWindow::moveInternals(const QPoint &bgOrigin)
 {
     background->setPosition(bgOrigin);
-    workingArea->setPosition(QPointF(frameWidth,frameWidth+titleBarHeight));
+    workingArea->setPosition(QPointF(frameWidth,frameWidth));
 
     if(titleBar)
     {
         titleBar->setPosition(QPointF(frameWidth,frameWidth));
+        workingArea->setPosition(workingArea->position()+QPointF(0,titleBarHeight));
     }
 
     if(statusBar)

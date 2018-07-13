@@ -2,8 +2,9 @@
 #define VNAAPPWINDOW_H
 
 #include "base_windows/basicwindow.h"
+#include "base_items/basicdockitem.h"
 #include <QObject>
-#include <list>
+#include <QList>
 
 class VNAAppWindow : public BasicWindow
 {
@@ -14,8 +15,13 @@ public:
     virtual ~VNAAppWindow()
     {}
 
+    void arrangeDockables();
+
+
 private:
-    std::list<BasicWindow*> dockables;
+    virtual void resizeEvent(QResizeEvent *event) override;
+
+    QList<BasicDockItem*> dockables;
 };
 
 

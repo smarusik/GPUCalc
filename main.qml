@@ -2,15 +2,14 @@ import QtQuick 2.10
 import QtQuick.Window 2.10
 import QtQuick.Controls 2.2
 import base_window 1.0
-import workarea_item 1.0
 import titlebar_item 1.0
 import statusbar_item 1.0
 import vnaapp_window 1.0
 
 VNAAppWindow{
     visible: true
-    width: 500
-    height: 500
+    width: 1000
+    height: 700
 
     titleBar:TitleBarItem{
         id:title
@@ -19,8 +18,9 @@ VNAAppWindow{
         leftIndent: height
         rightIndent: height*3
 
-        barContent: Rectangle{
-            color: "green"
+        barContent: Label{
+            color: "white"
+            text: "App window title"
         }
     }
 
@@ -29,14 +29,14 @@ VNAAppWindow{
         color: "blue"
 
         barContent: Label{
-            color: "magenta"
-            text: "Status: screwed-up."
+            color: "white"
+            text: "Status: main"
         }
     }
 
     BaseWindow{
         visible: true
-        width: 100
+        width: 300
         height: 100
 
         titleBar:TitleBarItem{
@@ -45,8 +45,9 @@ VNAAppWindow{
             leftIndent: height
             rightIndent: height*3
 
-            barContent: Rectangle{
-                color: "lightgreen"
+            barContent: Label{
+                color: "white"
+                text:"Channel window title"
             }
         }
 
@@ -55,7 +56,7 @@ VNAAppWindow{
 
             barContent: Label{
                 color: "white"
-                text: "Status: internal."
+                text: "Status: sub"
             }
         }
 

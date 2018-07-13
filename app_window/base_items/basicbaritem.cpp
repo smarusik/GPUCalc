@@ -76,8 +76,11 @@ void BasicBarItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldG
 {
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
     barNode->setBounds(QRectF(QPointF(0,0), newGeometry.size()));
-    barContent->setPosition(QPointF(leftIndent,0));
-    barContent->setSize(QSizeF(size().width()-leftIndent-rightIndent,size().height()));
+    if(barContent)
+    {
+        barContent->setPosition(QPointF(leftIndent,0));
+        barContent->setSize(QSizeF(size().width()-leftIndent-rightIndent,size().height()));
+    }
 
     update();
 }

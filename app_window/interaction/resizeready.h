@@ -7,6 +7,8 @@ class ResizeReady: public BasicInteractState
 {
 public:
     ResizeReady(quint32 hint);
+    virtual ~ResizeReady()
+    {}
 
     virtual void nextState(WinInteractState *sMachine,
                                           QMouseEvent *event,

@@ -2,8 +2,9 @@
 #include <QSGNode>
 #include <QSGFlatColorMaterial>
 
-BackgroundItem::BackgroundItem():
-color(Qt::gray)
+BackgroundItem::BackgroundItem(QQuickItem *parent):
+    QQuickItem(parent),
+    color(Qt::gray)
 {
     setFlag(ItemHasContents, true);
     setAcceptedMouseButtons(Qt::AllButtons);

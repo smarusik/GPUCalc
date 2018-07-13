@@ -9,25 +9,40 @@ TitleBarItem::TitleBarItem(QQuickItem *parent):
 
 void TitleBarItem::mousePressEvent(QMouseEvent *event)
 {
-    interState->nextIState(event,BasicInteractState::Move);
+    if(interState)
+    {
+        interState->nextIState(event,BasicInteractState::Move);
+    }
 }
 
 void TitleBarItem::mouseReleaseEvent(QMouseEvent *event)
 {
-    interState->nextIState(event,BasicInteractState::Move);
+    if(interState)
+    {
+        interState->nextIState(event,BasicInteractState::Move);
+    }
 }
 
 void TitleBarItem::hoverEnterEvent(QHoverEvent *event)
 {
-    interState->nextIState(event,BasicInteractState::Move);
+    if(interState)
+    {
+        interState->nextIState(event,BasicInteractState::Move);
+    }
 }
 
 void TitleBarItem::hoverLeaveEvent(QHoverEvent *event)
 {
-    interState->nextIState(event,BasicInteractState::Move);
+    if(interState)
+    {
+        interState->nextIState(event,BasicInteractState::Move);
+    }
 }
 
 void TitleBarItem::setInterState(WinInteractState *value)
 {
-    interState = value;
+    if(interState)
+    {
+        interState = value;
+    }
 }

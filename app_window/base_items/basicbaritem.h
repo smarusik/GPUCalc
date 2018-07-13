@@ -3,6 +3,7 @@
 
 #include "base_nodes/flatcolorrectangularnode.h"
 #include <QQuickItem>
+#include <QPointer>
 
 class BasicBarItem : public QQuickItem
 {
@@ -39,7 +40,7 @@ private:
     QColor color;
     quint32 leftIndent, rightIndent;
     FlatColorRectangularNode *barNode;
-    QQuickItem *barContent;
+    QPointer<QQuickItem> barContent;
 };
 
 #endif // BASICBARITEM_H
