@@ -8,7 +8,7 @@ BasicDockItem::BasicDockItem(QQuickItem *parent):
     background=new BackgroundItem;
     background->setParentItem(this);
     background->setPosition(QPointF(0,0));
-    background->setColor(Qt::gray);
+    background->setColor(Qt::green);
 
     workingArea=new BackgroundItem(background);
     workingArea->setColor(Qt::white);
