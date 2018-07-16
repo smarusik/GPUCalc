@@ -3,20 +3,20 @@
 
 #include "resizeready.h"
 
-class BaseConfirmaton : public ResizeReady
+class BaseConfirmation : public ResizeReady
 {
 public:
-    BaseConfirmaton(quint32 hint, const QPoint &chkPt);
-    virtual ~BaseConfirmaton()
+    BaseConfirmation(quint32 hint, const QPoint &chkPt);
+    virtual ~BaseConfirmation()
     {}
 
     virtual bool checkPositionDelta(const QPoint &pos) override;
 private:
-    QPoint resizeCheckPoint;
+    QPoint confirmCheckPoint;
 };
 
 
-class ResizeConfirmaton : public BaseConfirmaton
+class ResizeConfirmaton : public BaseConfirmation
 {
 public:
     ResizeConfirmaton(quint32 hint, const QPoint &chkPt);
@@ -25,22 +25,30 @@ public:
 
     virtual void nextState(WinInteractState *sMachine,
                                           QMouseEvent *event, quint32) override;
-private:
-    QPoint resizeCheckPoint;
 };
 
-class MoveConfirmaton : public BaseConfirmaton
+class MoveConfirmation : public BaseConfirmation
 {
 public:
-    MoveConfirmaton(const QPoint &chkPt);
-    virtual ~MoveConfirmaton()
+    MoveConfirmation(const QPoint &chkPt);
+    virtual ~MoveConfirmation()
     {}
 
     virtual void nextState(WinInteractState *sMachine,
                                           QMouseEvent *event,
                                           quint32) override;
-private:
-    QPoint resizeCheckPoint;
+};
+
+class DragConfirmation : public BaseConfirmation
+{
+public:
+    DragConfirmation(const QPoint &chkPt);
+    virtual ~DragConfirmation()
+    {}
+
+    virtual void nextState(WinInteractState *sMachine,
+                                          QMouseEvent *event,
+                                          quint32) override;
 };
 
 #endif // RESIZECONFIRMATON_H

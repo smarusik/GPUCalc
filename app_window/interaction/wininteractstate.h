@@ -19,9 +19,11 @@ class WinInteractState : public QObject
     Q_OBJECT
     friend class ResizeReady;
     friend class ResizeConfirmaton;
-    friend class MoveConfirmaton;
+    friend class MoveConfirmation;
+    friend class DragConfirmation;
     friend class ResizeProcess;
     friend class MoveProcess;
+    friend class DragProcess;
     friend class OrdinaryState;
 public:
     explicit WinInteractState(QQuickWindow *parent);
@@ -72,12 +74,13 @@ public:
         ResizeDiagRight=ResizeLeftTop|ResizeRightBottom,/* \ */
         ResizeDiagLeft=ResizeRightTop|ResizeLeftBottom, /* / */
 
-        ResizeGen=ResizeHorizontal
+        ResizeGeneral=ResizeHorizontal
                 |ResizeVertical
                 |ResizeDiagLeft
                 |ResizeDiagRight,
 
-        Move=256
+        Move=256,
+        Drag=512
     };
 
     enum ResizeOrigin

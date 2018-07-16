@@ -15,7 +15,7 @@ void IdleProcess::nextState(WinInteractState *sMachine, QHoverEvent *event, quin
 {
     if(event->type()&QEvent::HoverEnter)
     {
-        if(hint&ResizeGen || hint&Move)
+        if(hint&ResizeGeneral || hint&Move)
         {
             sMachine->setIState(new ResizeReady(hint));
         }

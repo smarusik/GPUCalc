@@ -14,7 +14,7 @@ ResizeReady::ResizeReady(quint32 hint)
         cursor=Qt::SizeBDiagCursor;
     else if(direction&ResizeDiagRight)
         cursor=Qt::SizeFDiagCursor;
-    else if(direction&Move)
+    else if(direction&(Move|Drag))
         cursor=Qt::OpenHandCursor;
     else
         cursor=Qt::ArrowCursor;
@@ -22,19 +22,26 @@ ResizeReady::ResizeReady(quint32 hint)
 
 void ResizeReady::nextState(WinInteractState *sMachine, QMouseEvent *event, quint32)
 {
-    if(event->type()&QEvent::MouseButtonPress
-            && event->button()&Qt::LeftButton)
+    if(event->type()&QEvent::MouseButtonPress)
     {
-        if(direction&ResizeGen)
+        if(event->button()&Qt::LeftButton)
         {
-            sMachine->setIState(new ResizeConfirmaton(direction,event->pos()));
+            if(direction&ResizeGeneral)
+            {
+                sMachine->setIState(new ResizeConfirmaton(direction,event->pos()));
+            }
+            else if(direction&Move)
+            {
+                sMachine->setIState(new MoveConfirmation(event->pos()));
+            }
         }
-        else if(direction&Move)
+        else if(event->button()&Qt::RightButton)
         {
-            sMachine->setIState(new MoveConfirmaton(event->pos()));
+            if(direction&(Drag|Move))
+            {
+                sMachine->setIState(new DragConfirmation(event->pos()));
+            }
         }
-
-
 
         sMachine->trackMousePosition(event->screenPos());
     }

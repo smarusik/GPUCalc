@@ -4,7 +4,7 @@ TitleBarItem::TitleBarItem(QQuickItem *parent):
     BasicBarItem(parent)
 {
     setAcceptHoverEvents(true);
-    setAcceptedMouseButtons(Qt::LeftButton);
+    setAcceptedMouseButtons(Qt::LeftButton|Qt::RightButton);
 }
 
 void TitleBarItem::mousePressEvent(QMouseEvent *event)
