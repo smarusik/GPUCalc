@@ -74,7 +74,16 @@ void BasicWindow::mouseReleaseEvent(QMouseEvent *event)
 
 void BasicWindow::mouseMoveEvent(QMouseEvent *event)
 {
-    interState.trackMousePosition(event->globalPos());
+    if(interState.checkPositionDelta(event->pos()))
+    {
+        interState.nextIState(event);
+    }
+
+    if(interState.isInResizingState())
+    {
+        interState.trackMousePosition(event->globalPos());
+    }
+
     QQuickWindow::mouseMoveEvent(event);
 }
 

@@ -11,8 +11,7 @@ public:
     {}
 
     virtual void nextState(WinInteractState *sMachine,
-                                          QMouseEvent *event,
-                                          quint32 hint) override;
+                                          QMouseEvent *event, quint32) override;
 
     virtual void nextState(WinInteractState *sMachine,
                                           QHoverEvent *event,

@@ -18,6 +18,11 @@ bool WinInteractState::isInResizingState()
     return iState->isInResizingState();
 }
 
+bool WinInteractState::checkPositionDelta(const QPoint &pos)
+{
+    return iState->checkPositionDelta(pos);
+}
+
 void WinInteractState::trackMousePosition(const QPointF &pos)
 {
     iState->trackMousePosition(pos);

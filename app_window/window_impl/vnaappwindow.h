@@ -20,8 +20,10 @@ public:
 
 private:
     virtual void resizeEvent(QResizeEvent *event) override;
+    virtual void mouseMoveEvent(QMouseEvent *event) override;
 
     QList<BasicDockItem*> dockables;
+
 };
 
 

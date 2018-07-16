@@ -12,9 +12,9 @@ void ChannelWindow::resizeEvent(QResizeEvent *event)
     BasicWindow::resizeEvent(event);
 }
 
-void ChannelWindow::moveEvent(QMoveEvent *event)
+void ChannelWindow::mouseMoveEvent(QMouseEvent *event)
 {
-    BasicWindow::moveEvent(event);
+    BasicWindow::mouseMoveEvent(event);
 }
 
 void ChannelWindow::onXChanged(int x)

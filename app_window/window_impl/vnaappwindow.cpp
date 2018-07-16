@@ -61,3 +61,8 @@ void VNAAppWindow::resizeEvent(QResizeEvent *event)
     BasicWindow::resizeEvent(event);
     arrangeDockables();
 }
+
+void VNAAppWindow::mouseMoveEvent(QMouseEvent *event)
+{
+    BasicWindow::mouseMoveEvent(event);
+}

@@ -18,6 +18,8 @@ class WinInteractState : public QObject
 {
     Q_OBJECT
     friend class ResizeReady;
+    friend class ResizeConfirmaton;
+    friend class MoveConfirmaton;
     friend class ResizeProcess;
     friend class MoveProcess;
     friend class OrdinaryState;
@@ -26,6 +28,7 @@ public:
 
     QCursor getCursor();
     bool isInResizingState();
+    bool checkPositionDelta(const QPoint &pos);
     void trackMousePosition(const QPointF &pos);
     const QRect &getStartGeometry();
     bool updateRubberBand();
@@ -96,6 +99,11 @@ public:
     }
 
     virtual bool isInResizingState()
+    {
+        return false;
+    }
+
+    virtual bool checkPositionDelta(const QPoint &pos)
     {
         return false;
     }

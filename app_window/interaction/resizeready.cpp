@@ -1,6 +1,5 @@
 #include "resizeready.h"
-#include "moveprocess.h"
-#include "resizeprocess.h"
+#include "modificationconfirmaton.h"
 #include "idleprocess.h"
 
 ResizeReady::ResizeReady(quint32 hint)
@@ -21,19 +20,22 @@ ResizeReady::ResizeReady(quint32 hint)
         cursor=Qt::ArrowCursor;
 }
 
-void ResizeReady::nextState(WinInteractState *sMachine, QMouseEvent *event, quint32 hint)
+void ResizeReady::nextState(WinInteractState *sMachine, QMouseEvent *event, quint32)
 {
     if(event->type()&QEvent::MouseButtonPress
             && event->button()&Qt::LeftButton)
     {
-        if(hint&Move)
+        if(direction&ResizeGen)
         {
-            sMachine->setIState(new MoveProcess(hint,sMachine->parentWindow));
+            sMachine->setIState(new ResizeConfirmaton(direction,event->pos()));
         }
-        else if(hint&ResizeGen)
+        else if(direction&Move)
         {
-            sMachine->setIState(new ResizeProcess(hint,sMachine->parentWindow));
+            sMachine->setIState(new MoveConfirmaton(event->pos()));
         }
+
+
+
         sMachine->trackMousePosition(event->screenPos());
     }
 }

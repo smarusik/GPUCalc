@@ -33,7 +33,8 @@ SOURCES += \
     app_window/interaction/moveprocess.cpp \
     app_window/interaction/idleprocess.cpp \
     app_window/base_items/basicdockitem.cpp \
-    app_window/window_impl/channelwindow.cpp
+    app_window/window_impl/channelwindow.cpp \
+    app_window/interaction/modificationconfirmaton.cpp
 
 RESOURCES += qml.qrc
 
@@ -67,7 +68,8 @@ HEADERS += \
     app_window/interaction/moveprocess.h \
     app_window/interaction/idleprocess.h \
     app_window/base_items/basicdockitem.h \
-    app_window/window_impl/channelwindow.h
+    app_window/window_impl/channelwindow.h \
+    app_window/interaction/modificationconfirmaton.h
 
 DISTFILES += \
     triangle.vert \
