@@ -1,7 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Window 2.10
 import QtQuick.Controls 2.2
-import base_window 1.0
+import channel_window 1.0
 import titlebar_item 1.0
 import statusbar_item 1.0
 import vnaapp_window 1.0
@@ -34,7 +34,7 @@ VNAAppWindow{
         }
     }
 
-    BaseWindow{
+    ChannelWindow{
         visible: true
         width: 300
         height: 100

@@ -29,10 +29,8 @@ bool VNAAppWindow::arrangeDockables()
 
     qreal rCols=std::sqrt(dockablesNum*ratio);
     int cols=rCols>=dockablesNum?dockablesNum:std::ceil(rCols);
-
     std::div_t distr=std::div(dockablesNum,cols);
     int raws=distr.quot + (distr.rem>0?1:0);
-
     qreal vStep=workingArea->height()/raws;
     qreal hStep=workingArea->width()/cols;
 
@@ -61,11 +59,5 @@ bool VNAAppWindow::arrangeDockables()
 void VNAAppWindow::resizeEvent(QResizeEvent *event)
 {
     BasicWindow::resizeEvent(event);
-
     arrangeDockables();
-//    if(!arrangeDockables())
-//    {
-//        setHeight(event->oldSize().height());
-//        setWidth(event->oldSize().width());
-//    }
 }
