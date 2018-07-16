@@ -6,7 +6,7 @@
 VNAAppWindow::VNAAppWindow(QWindow *parent):
     BasicWindow(parent)
 {
-    for(int i=0; i<3; i++)
+    for(int i=0; i<7; i++)
     {
         BasicDockItem *item=new BasicDockItem(workingArea);
 
@@ -27,20 +27,20 @@ bool VNAAppWindow::arrangeDockables()
         return false;
     }
 
-    qreal rRows=std::sqrt(dockablesNum/ratio);
-    int rows=rRows>=dockablesNum?dockablesNum:std::ceil(rRows);
-    int columns=std::ceil(dockablesNum/rows);
+    qreal rCols=std::sqrt(dockablesNum*ratio);
+    int cols=rCols>=dockablesNum?dockablesNum:std::ceil(rCols);
 
-    std::div_t distr=std::div(dockablesNum,columns);
+    std::div_t distr=std::div(dockablesNum,cols);
+    int raws=distr.quot + (distr.rem>0?1:0);
 
-    qreal vStep=workingArea->height()/rows;
-    qreal hStep=workingArea->width()/columns;
+    qreal vStep=workingArea->height()/raws;
+    qreal hStep=workingArea->width()/cols;
 
-    int curCol=columns;
+    int curCol=cols;
 
-    for(int i=0; i<rows; ++i)
+    for(int i=0; i<raws; ++i)
     {
-        if(i==rows-1 && distr.rem>0)
+        if(i==raws-1 && distr.rem>0)
         {
             hStep=workingArea->width()/distr.rem;
             curCol=distr.rem;
@@ -48,10 +48,10 @@ bool VNAAppWindow::arrangeDockables()
 
         for(int j=0;j<curCol;++j)
         {
-            dockables[i*columns+j]->setX(hStep*j/2);
-            dockables[i*columns+j]->setY(vStep*i/2);
-            dockables[i*columns+j]->setSize(QSizeF(hStep,vStep));
-            dockables[i*columns+j]->update();
+            dockables[i*cols+j]->setX(hStep*j/2);
+            dockables[i*cols+j]->setY(vStep*i/2);
+            dockables[i*cols+j]->setSize(QSizeF(hStep,vStep));
+            dockables[i*cols+j]->update();
         }
     }
 
