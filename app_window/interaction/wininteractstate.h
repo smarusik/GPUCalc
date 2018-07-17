@@ -2,7 +2,6 @@
 #define WINDOWSTATES_H
 
 #include "rubberband.h"
-#include <QQuickWindow>
 #include <QScreen>
 #include <QCursor>
 #include <QObject>
@@ -13,10 +12,12 @@
 
 //States context
 class BasicInteractState;
+class BasicWindow;
 
 class WinInteractState : public QObject
 {
     Q_OBJECT
+    friend class IdleProcess;
     friend class ResizeReady;
     friend class ResizeConfirmaton;
     friend class MoveConfirmation;
@@ -24,9 +25,10 @@ class WinInteractState : public QObject
     friend class ResizeProcess;
     friend class MoveProcess;
     friend class DragProcess;
+    friend class DropProcess;
     friend class OrdinaryState;
 public:
-    explicit WinInteractState(QQuickWindow *parent);
+    explicit WinInteractState(BasicWindow *parent);
 
     QCursor getCursor();
     bool isInResizingState();
@@ -37,13 +39,16 @@ public:
 
     void nextIState(QMouseEvent *event, quint32 hint=0);
     void nextIState(QHoverEvent *event, quint32 hint=0);
+    void nextIState(QDragEnterEvent *event, quint32 hint=0);
+    void nextIState(QDragLeaveEvent *event, quint32 hint=0);
+    void nextIState(QDropEvent *event, quint32 hint=0);
 
     void setIState(BasicInteractState *value);
     void setStartGeometry(const QRect &value);
 
 private:
     QScopedPointer<BasicInteractState> iState;
-    QQuickWindow *parentWindow;
+    BasicWindow *parentWindow;
     QRect startGeometry;
 };
 
@@ -128,6 +133,22 @@ public:
     virtual void nextState(WinInteractState *sMachine,
                                           QHoverEvent *event,
                                           quint32 hint=0)=0;
+
+    virtual void nextState(WinInteractState *sMachine,
+                                          QDragEnterEvent *event,
+                                          quint32 hint=0)
+    {}
+
+    virtual void nextState(WinInteractState *sMachine,
+                                          QDragLeaveEvent *event,
+                                          quint32 hint=0)
+    {}
+
+    virtual void nextState(WinInteractState *sMachine,
+                                          QDropEvent *event,
+                                          quint32 hint=0)
+    {}
+
 protected:
     QCursor cursor;
     quint32 direction;

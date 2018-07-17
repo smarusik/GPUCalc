@@ -61,4 +61,60 @@ VNAAppWindow{
         }
 
     }
+
+    ChannelWindow{
+        visible: true
+        width: 300
+        height: 100
+
+        titleBar:TitleBarItem{
+            color:"lightblue"
+
+            leftIndent: height
+            rightIndent: height*3
+
+            barContent: Label{
+                color: "white"
+                text:"Channel window title"
+            }
+        }
+
+        statusBar:StatusBarItem{
+            color: "blue"
+
+            barContent: Label{
+                color: "white"
+                text: "Status: sub"
+            }
+        }
+
+    }
+
+    ChannelWindow{
+        visible: true
+        width: 300
+        height: 100
+
+        titleBar:TitleBarItem{
+            color:"lightblue"
+
+            leftIndent: height
+            rightIndent: height*3
+
+            barContent: Label{
+                color: "white"
+                text:"Channel window title"
+            }
+        }
+
+        statusBar:StatusBarItem{
+            color: "blue"
+
+            barContent: Label{
+                color: "white"
+                text: "Status: sub"
+            }
+        }
+
+    }
 }

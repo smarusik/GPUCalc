@@ -6,6 +6,7 @@
 
 class ChannelWindow : public BasicWindow
 {
+    Q_OBJECT
 public:
     ChannelWindow(QWindow *parent=nullptr);
 private:

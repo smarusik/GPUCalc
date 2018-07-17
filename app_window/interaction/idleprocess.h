@@ -15,6 +15,9 @@ public:
     virtual void nextState(WinInteractState *sMachine,
                                           QHoverEvent *event,
                                           quint32 hint=0) override;
+
+    virtual void nextState(WinInteractState *sMachine,
+                                           QDragEnterEvent *event, quint32);
 };
 
 #endif // IDLINGSTATE_H

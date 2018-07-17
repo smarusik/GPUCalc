@@ -23,11 +23,6 @@ protected:
 
     WinInteractState *interState;
 
-    // QQuickItem interface
-protected:
-    virtual void dragEnterEvent(QDragEnterEvent *event) override;
-    virtual void dragMoveEvent(QDragMoveEvent *event) override;
-    virtual void dragLeaveEvent(QDragLeaveEvent *event) override;
 };
 
 #endif // BASICCONTENTLESSITEM_H

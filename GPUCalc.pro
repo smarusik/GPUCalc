@@ -35,7 +35,9 @@ SOURCES += \
     app_window/base_items/basicdockitem.cpp \
     app_window/window_impl/channelwindow.cpp \
     app_window/interaction/modificationconfirmaton.cpp \
-    app_window/interaction/dragprocess.cpp
+    app_window/interaction/dragprocess.cpp \
+    app_window/item_impl/dockingplaceitem.cpp \
+    app_window/interaction/dropprocess.cpp
 
 RESOURCES += qml.qrc
 
@@ -71,7 +73,9 @@ HEADERS += \
     app_window/base_items/basicdockitem.h \
     app_window/window_impl/channelwindow.h \
     app_window/interaction/modificationconfirmaton.h \
-    app_window/interaction/dragprocess.h
+    app_window/interaction/dragprocess.h \
+    app_window/item_impl/dockingplaceitem.h \
+    app_window/interaction/dropprocess.h
 
 DISTFILES += \
     triangle.vert \

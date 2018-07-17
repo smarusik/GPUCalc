@@ -154,6 +154,11 @@ void BasicWindow::moveInternals(const QPoint &bgOrigin)
     rbCorner->setPosition(QPointF(background->width()-frameWidth*2,background->height()-frameWidth*2));
 }
 
+WinInteractState &BasicWindow::getInterState()
+{
+    return interState;
+}
+
 StatusBarItem *BasicWindow::getStatusBar() const
 {
     return statusBar;

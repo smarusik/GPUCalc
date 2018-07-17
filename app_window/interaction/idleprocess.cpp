@@ -1,5 +1,8 @@
 #include "idleprocess.h"
 #include "resizeready.h"
+#include "dropprocess.h"
+#include "window_impl/channelwindow.h"
+#include "window_impl/vnaappwindow.h"
 
 IdleProcess::IdleProcess()
 {
@@ -19,5 +22,16 @@ void IdleProcess::nextState(WinInteractState *sMachine, QHoverEvent *event, quin
         {
             sMachine->setIState(new ResizeReady(hint));
         }
+    }
+}
+
+void IdleProcess::nextState(WinInteractState *sMachine, QDragEnterEvent *event, quint32)
+{
+    ChannelWindow *dropableWindow=qobject_cast<ChannelWindow *>(event->source());
+
+    if(dropableWindow)
+    {
+        sMachine->setIState(new DropProcess(qobject_cast<VNAAppWindow*>(sMachine->parentWindow),
+                                            dropableWindow));
     }
 }

@@ -39,19 +39,3 @@ void BasicContentlessItem::setInterState(WinInteractState *value)
 void BasicContentlessItem::timerEvent(QTimerEvent *)
 {
 }
-
-
-void BasicContentlessItem::dragEnterEvent(QDragEnterEvent *event)
-{
-    qDebug()<<event;
-}
-
-void BasicContentlessItem::dragMoveEvent(QDragMoveEvent *event)
-{
-    qDebug()<<event;
-}
-
-void BasicContentlessItem::dragLeaveEvent(QDragLeaveEvent *event)
-{
-    qDebug()<<event;
-}

@@ -17,7 +17,7 @@ public:
     virtual void nextState(WinInteractState *sMachine,
                                           QMouseEvent *event,
                                           quint32 hint) override;
-private:
+protected:
     QQuickWindow *hostWindow;
     QRect originalPos;
     QPointF mouseOffset;

@@ -1,7 +1,8 @@
 #include "wininteractstate.h"
 #include "idleprocess.h"
+#include "base_windows/basicwindow.h"
 
-WinInteractState::WinInteractState(QQuickWindow *parent) :
+WinInteractState::WinInteractState(BasicWindow *parent) :
     QObject(parent),
     parentWindow(parent)
 {
@@ -46,6 +47,21 @@ void WinInteractState::nextIState(QMouseEvent *event, quint32 hint)
 void WinInteractState::nextIState(QHoverEvent *event, quint32 hint)
 {
     iState->nextState(this,event,hint);
+}
+
+void WinInteractState::nextIState(QDragEnterEvent *event, quint32 hint)
+{
+    iState->nextState(this,event);
+}
+
+void WinInteractState::nextIState(QDragLeaveEvent *event, quint32 hint)
+{
+    iState->nextState(this,event);
+}
+
+void WinInteractState::nextIState(QDropEvent *event, quint32 hint)
+{
+    iState->nextState(this,event);
 }
 
 void WinInteractState::setIState(BasicInteractState *value)

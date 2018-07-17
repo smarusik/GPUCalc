@@ -3,6 +3,7 @@
 
 #include "base_windows/basicwindow.h"
 #include "base_items/basicdockitem.h"
+#include "item_impl/dockingplaceitem.h"
 #include <QObject>
 #include <QList>
 
@@ -15,14 +16,19 @@ public:
     virtual ~VNAAppWindow()
     {}
 
+    void addDockable(QQuickItem* dock);
+    bool removeLastDockable();
     bool arrangeDockables();
 
+
+    DockingPlaceItem *getDockArea() const;
 
 private:
     virtual void resizeEvent(QResizeEvent *event) override;
     virtual void mouseMoveEvent(QMouseEvent *event) override;
 
-    QList<BasicDockItem*> dockables;
+    QList<QQuickItem*> dockables;
+    DockingPlaceItem *dockArea;
 
 };
 

@@ -1,4 +1,5 @@
 #include "vnaappwindow.h"
+#include "channelwindow.h"
 #include <math.h>
 #include <stdlib.h>
 
@@ -6,19 +7,37 @@
 VNAAppWindow::VNAAppWindow(QWindow *parent):
     BasicWindow(parent)
 {
+
     for(int i=0; i<7; i++)
     {
         BasicDockItem *item=new BasicDockItem(workingArea);
 
         dockables.push_back(item);
-        item->setPosition(QPointF(i*50,i*50));
-        item->setSize(QSizeF(100,100));
         item->update();
     }
+
+    dockArea=new DockingPlaceItem(workingArea);
+    dockArea->setInterState(&interState);
+}
+
+void VNAAppWindow::addDockable(QQuickItem *dock)
+{
+    dock->setParentItem(workingArea);
+    dockables.push_back(dock);
+}
+
+bool VNAAppWindow::removeLastDockable()
+{
+    dockables.removeLast();
 }
 
 bool VNAAppWindow::arrangeDockables()
 {
+    if(dockables.count()==0)
+    {
+        return false;
+    }
+
     qreal dockablesNum=dockables.size();
     qreal ratio=workingArea->width()/workingArea->height();
 
@@ -60,9 +79,16 @@ void VNAAppWindow::resizeEvent(QResizeEvent *event)
 {
     BasicWindow::resizeEvent(event);
     arrangeDockables();
+    dockArea->setPosition(QPointF(0,0));
+    dockArea->setSize(workingArea->size());
 }
 
 void VNAAppWindow::mouseMoveEvent(QMouseEvent *event)
 {
     BasicWindow::mouseMoveEvent(event);
+}
+
+DockingPlaceItem *VNAAppWindow::getDockArea() const
+{
+    return dockArea;
 }

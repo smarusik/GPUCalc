@@ -27,6 +27,8 @@ public:
     StatusBarItem *getStatusBar() const;
     void setStatusBar(StatusBarItem *value);
 
+    WinInteractState &getInterState();
+
 signals:
     void titleBarChanged(TitleBarItem *tBar);
     void statusBarChanged(TitleBarItem *sBar);

@@ -1,4 +1,5 @@
 #include "modificationconfirmaton.h"
+#include "base_windows/basicwindow.h"
 #include "moveprocess.h"
 #include "resizeprocess.h"
 #include "dragprocess.h"
@@ -64,6 +65,6 @@ void DragConfirmation::nextState(WinInteractState *sMachine, QMouseEvent *event,
         return;
     }
 
-    sMachine->setIState(new DragProcess(direction,sMachine->parentWindow));
+    sMachine->setIState(new DragProcess(direction,qobject_cast<BasicWindow*>(sMachine->parentWindow)));
     sMachine->trackMousePosition(event->screenPos());
 }

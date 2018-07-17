@@ -1,5 +1,6 @@
 #include "resizeprocess.h"
 #include "idleprocess.h"
+#include "base_windows/basicwindow.h"
 
 ResizeProcess::ResizeProcess(quint32 hint, QQuickWindow *hW):
     ResizeReady(hint),
